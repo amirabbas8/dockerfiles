@@ -40,3 +40,8 @@ You can additionally set the `SCHEDULE` environment variable like `-e SCHEDULE="
 
 More information about the scheduling can be found [here](http://godoc.org/github.com/robfig/cron#hdr-Predefined_schedules).
 
+### Backup of more than one database
+
+You can backup more than one database by assigning a comma separated list to `POSTGRES_DATABASE`, e.g. `POSTGRES_DATABASE=dbname1,dbname2,dbname3`.
+
+All database must share the same `POSTGRES_USER` and `POSTGRES_PASSWORD`, of course.

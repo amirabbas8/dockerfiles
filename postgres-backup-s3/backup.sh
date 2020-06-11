@@ -57,12 +57,17 @@ export AWS_DEFAULT_REGION=$S3_REGION
 export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTGRES_EXTRA_OPTS"
 
-echo "Creating dump of ${POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
+items=$(echo $POSTGRES_DATABASE | tr "," "\n")
+for SINGLE_POSTGRES_DATABASE in $items ; do
 
-pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip > dump.sql.gz
+  echo "Creating dump of ${SINGLE_POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
 
-echo "Uploading dump to $S3_BUCKET"
+  pg_dump $POSTGRES_HOST_OPTS $SINGLE_POSTGRES_DATABASE | gzip > dump.sql.gz
 
-cat dump.sql.gz | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/${POSTGRES_DATABASE}_$(date +"%Y-%m-%dT%H:%M:%SZ").sql.gz || exit 2
+  echo "Uploading dump to $S3_BUCKET"
 
-echo "SQL backup uploaded successfully"
+  cat dump.sql.gz | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/${SINGLE_POSTGRES_DATABASE}_$(date +"%Y-%m-%dT%H:%M:%SZ").sql.gz || exit 2
+
+  echo "SQL backup uploaded successfully"
+
+done
