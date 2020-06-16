@@ -57,7 +57,12 @@ export AWS_DEFAULT_REGION=$S3_REGION
 export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTGRES_EXTRA_OPTS"
 
-items=$(echo $POSTGRES_DATABASE | tr "," "\n")
+if [[ "$POSTGRES_DATABASE" == "all" ]] ; then
+  items=`psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -t -A -c 'SELECT datname FROM pg_database'`
+else
+  items=$(echo $POSTGRES_DATABASE | tr "," "\n")
+fi
+
 for SINGLE_POSTGRES_DATABASE in $items ; do
 
   echo "Creating dump of ${SINGLE_POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
