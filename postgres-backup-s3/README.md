@@ -44,6 +44,6 @@ More information about the scheduling can be found [here](http://godoc.org/githu
 
 You can backup more than one database by assigning a comma separated list to `POSTGRES_DATABASE`, e.g. `POSTGRES_DATABASE=dbname1,dbname2,dbname3`.
 
-You can also backup all databases (one by one) by calling `POSTGRES_DATABASE=all`.
+You can also backup all databases (one by one) by calling `POSTGRES_DATABASE=all` (db named `template0,template1,rdsadmin` will be skipped).
 
 All database must share the same `POSTGRES_USER` and `POSTGRES_PASSWORD`, of course.
