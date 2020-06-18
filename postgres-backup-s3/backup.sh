@@ -58,7 +58,8 @@ export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTGRES_EXTRA_OPTS"
 
 if [[ "$POSTGRES_DATABASE" == "all" ]] ; then
-  items=`psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -t -A -c 'SELECT datname FROM pg_database'`
+  SKIP="'template0','template1','rdsadmin'"
+  items=`psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -t -A -c "SELECT datname FROM pg_database where datname not in ($SKIP)"`
 else
   items=$(echo $POSTGRES_DATABASE | tr "," "\n")
 fi
