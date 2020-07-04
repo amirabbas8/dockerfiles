@@ -6,7 +6,7 @@ Backup PostgresSQL to S3 (supports periodic backups)
 
 Docker:
 ```sh
-$ docker run -e S3_ACCESS_KEY_ID=key -e S3_SECRET_ACCESS_KEY=secret -e S3_BUCKET=my-bucket -e S3_PREFIX=backup -e POSTGRES_DATABASE=dbname -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_HOST=localhost schickling/postgres-backup-s3
+$ docker run -e S3_ACCESS_KEY_ID=key -e S3_SECRET_ACCESS_KEY=secret -e S3_BUCKET=my-bucket -e S3_PREFIX=backup -e POSTGRES_DATABASE=dbname -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_HOST=localhost amirabbas/postgres-backup-s3
 ```
 
 Docker Compose:
@@ -18,12 +18,12 @@ postgres:
     POSTGRES_PASSWORD: password
 
 pgbackups3:
-  image: schickling/postgres-backup-s3
+  image: amirabbas/postgres-backup-s3
   links:
     - postgres
   environment:
     SCHEDULE: '@daily'
-    S3_REGION: region
+    S3_ENDPOINT: https://s3.ir-thr-at1.arvanstorage.com
     S3_ACCESS_KEY_ID: key
     S3_SECRET_ACCESS_KEY: secret
     S3_BUCKET: my-bucket
@@ -40,10 +40,3 @@ You can additionally set the `SCHEDULE` environment variable like `-e SCHEDULE="
 
 More information about the scheduling can be found [here](http://godoc.org/github.com/robfig/cron#hdr-Predefined_schedules).
 
-### Backup of more than one database
-
-You can backup more than one database by assigning a comma separated list to `POSTGRES_DATABASE`, e.g. `POSTGRES_DATABASE=dbname1,dbname2,dbname3`.
-
-You can also backup all databases (one by one) by calling `POSTGRES_DATABASE=all` (db named `template0,template1,rdsadmin` will be skipped).
-
-All database must share the same `POSTGRES_USER` and `POSTGRES_PASSWORD`, of course.
