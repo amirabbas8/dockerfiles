@@ -1,5 +1,5 @@
-FROM alpine:3.7
-LABEL maintainer="Johannes Schickling <schickling.j@gmail.com>"
+FROM alpine:3.12
+LABEL maintainer="Amir Abbas <am_882011@live.com>"
 
 ADD install.sh install.sh
 RUN sh install.sh && rm install.sh
