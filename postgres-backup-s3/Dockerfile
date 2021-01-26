@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:latest
 LABEL maintainer="Amir Abbas <am_882011@live.com>"
 
 ADD install.sh install.sh
